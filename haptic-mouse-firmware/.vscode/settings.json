@@ -1,0 +1,39 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "idf.adapterTargetName": "esp32s3",
+    "idf.customExtraPaths": "/Users/lihuantao/.espressif/tools/xtensa-esp-elf-gdb/14.2_20240403/xtensa-esp-elf-gdb/bin:/Users/lihuantao/.espressif/tools/riscv32-esp-elf-gdb/14.2_20240403/riscv32-esp-elf-gdb/bin:/Users/lihuantao/.espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin:/Users/lihuantao/.espressif/tools/riscv32-esp-elf/esp-13.2.0_20240530/riscv32-esp-elf/bin:/Users/lihuantao/.espressif/tools/esp32ulp-elf/2.38_20240113/esp32ulp-elf/bin:/Users/lihuantao/.espressif/tools/cmake/3.24.0/CMake.app/Contents/bin:/Users/lihuantao/.espressif/tools/openocd-esp32/v0.12.0-esp32-20240318/openocd-esp32/bin:/Users/lihuantao/.espressif/tools/ninja/1.11.1:/Users/lihuantao/.espressif/tools/esp-rom-elfs/20240305",
+    "idf.customExtraVars": {
+        "OPENOCD_SCRIPTS": "/Users/lihuantao/.espressif/tools/openocd-esp32/v0.12.0-esp32-20240318/openocd-esp32/share/openocd/scripts",
+        "ESP_ROM_ELF_DIR": "/Users/lihuantao/.espressif/tools/esp-rom-elfs/20240305/"
+    },
+    "idf.espIdfPath": "/Users/lihuantao/esp/v5.3.1/esp-idf",
+    "idf.openOcdConfigs": [
+        "board/esp32s3-builtin.cfg"
+    ],
+    "idf.port": "/dev/tty.usbmodem212301",
+    "idf.pythonBinPath": "/Users/lihuantao/.espressif/python_env/idf5.3_py3.9_env/bin/python",
+    "idf.toolsPath": "/Users/lihuantao/.espressif",
+    "idf.flashType": "UART",
+    "files.associations": {
+        "cmd_handle.h": "c",
+        "freertos.h": "c",
+        "usb_serial_jtag.h": "c",
+        "haptic_mouse.h": "c",
+        "task.h": "c",
+        "esp_log.h": "c",
+        "queue.h": "c",
+        "string.h": "c",
+        "esp_littlefs.h": "c",
+        "i2s_std.h": "c",
+        "i2s_types.h": "c",
+        "*.tcc": "cpp",
+        "chrono": "cpp",
+        "random": "cpp",
+        "format": "cpp",
+        "functional": "cpp",
+        "regex": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp"
+    },
+    "editor.tabSize": 4
+}

@@ -1,0 +1,42 @@
+Demo LittleFs implementation by esp_littlefs!
+   https://github.com/joltwallet/esp_littlefs
+This is esp32s3 chip with 2 CPU cores, WiFi/BLE, silicon revision 2, 16MB external flash
+Free heap: 8520760
+Now we are starting the LittleFs Demo ...
+I (866) demo_esp_littlefs: Initializing LittleFS
+E (866) esp_littlefs: partition "littlefs" could not be found
+E (876) esp_littlefs: Failed to initialize LittleFS
+E (886) demo_esp_littlefs: Failed to find LittleFS partition
+E (886) FreeRTOS: FreeRTOS Task "I2S_task" should not return, Aborting now!
+
+abort() was called at PC 0x4037bfeb on core 0
+--- 0x4037bfeb: vPortTaskWrapper at /Users/lihuantao/esp/v5.3.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:138
+
+
+
+Backtrace: 0x40375c36:0x3fca73b0 0x4037b769:0x3fca73d0 0x40381d1d:0x3fca73f0 0x4037bfeb:0x3fca7460
+--- 0x40375c36: panic_abort at /Users/lihuantao/esp/v5.3.1/esp-idf/components/esp_system/panic.c:463
+0x4037b769: esp_system_abort at /Users/lihuantao/esp/v5.3.1/esp-idf/components/esp_system/port/esp_system_chip.c:92
+0x40381d1d: abort at /Users/lihuantao/esp/v5.3.1/esp-idf/components/newlib/abort.c:38
+0x4037bfeb: vPortTaskWrapper at /Users/lihuantao/esp/v5.3.1/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:138
+
+
+
+
+
+ELF file SHA256: d0bd6e68c
+
+Rebooting...
+���ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x2b (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40375b70
+--- 0x40375b70: esp_restart_noos at /Users/lihuantao/esp/v5.3.1/esp-idf/components/esp_system/port/soc/esp32s3/system_internal.c:158
+
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x178c
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xcb8
+load:0x403cb700,len:0x2db0
+entry 0x403c8914
