@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Haptic Mouse</title>
+  <style>
+    body {
+      width: 400px;
+      min-height: 300px;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 10px;
+    }
+    h1 {
+      font-size: 18px;
+      margin-top: 0;
+      color: #333;
+    }
+    .section {
+      margin-bottom: 15px;
+    }
+    .events-container {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 8px;
+      background-color: #f9f9f9;
+    }
+    .event-item {
+      margin-bottom: 5px;
+      padding: 5px;
+      border-bottom: 1px solid #eee;
+      font-size: 12px;
+    }
+    .text-container {
+      min-height: 60px;
+      border: 1px solid #ddd;
+      padding: 8px;
+      background-color: #f9f9f9;
+      word-wrap: break-word;
+    }
+    .status {
+      font-size: 11px;
+      color: #666;
+      margin-top: 5px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>Haptic Mouse 插件</h1>
+  
+  <div class="section">
+    <h2>鼠标事件</h2>
+    <div id="events" class="events-container">
+      <div class="status">等待鼠标事件...</div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <h2>选中的文本</h2>
+    <div id="selected-text" class="text-container">
+      <div class="status">尚未选中任何文本</div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <button id="open-test-page" style="padding: 8px 15px; background-color: #4285f4; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">打开测试页面</button>
+  </div>
+
+  <div class="status" id="update-status">实时更新已启用</div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
