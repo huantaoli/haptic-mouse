@@ -1,14 +1,14 @@
-// 检查当前窗口是否是固定窗口
+// Check if current window is detached
 let isDetachedWindow = window.location.search.includes('detached=true');
 
-// 当popup页面加载完成时执行
+// Execute when popup page is loaded
 document.addEventListener('DOMContentLoaded', function() {
-  // 获取DOM元素
+  // Get DOM elements
   const eventsContainer = document.getElementById('events');
   const selectedTextContainer = document.getElementById('selected-text');
   const updateStatus = document.getElementById('update-status');
   
-  // 如果是popup模式，添加固定按钮
+  // Add pin button if in popup mode
   if (!isDetachedWindow) {
     addPinButton();
   }
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const openTestPageButton = document.getElementById('open-test-page');
     if (openTestPageButton) {
       openTestPageButton.addEventListener('click', function() {
-        // 在新标签页中打开测试页面
+        // Open test page in new tab
         chrome.tabs.create({
           url: chrome.runtime.getURL('index.html')
         });
@@ -37,20 +37,20 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 初始化页面数据
   function initializeData() {
-    // 获取当前标签页
+    // Get current tab
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       if (tabs.length === 0) return;
       
       const activeTab = tabs[0];
       
-      // 获取鼠标事件数据
+      // Get mouse event data
       chrome.tabs.sendMessage(activeTab.id, {action: 'getMouseEvents'}, function(response) {
         if (response && response.events) {
           displayMouseEvents(response.events);
         }
       });
       
-      // 获取选中的文本
+      // Get selected text
       chrome.tabs.sendMessage(activeTab.id, {action: 'getSelectedText'}, function(response) {
         if (response && response.text) {
           displaySelectedText(response.text);
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // 添加固定按钮
   function addPinButton() {
     const pinButton = document.createElement('button');
-    pinButton.textContent = '固定窗口';
+    pinButton.textContent = 'Pin Window';
     pinButton.style.position = 'absolute';
     pinButton.style.top = '10px';
     pinButton.style.right = '10px';
@@ -74,14 +74,14 @@ document.addEventListener('DOMContentLoaded', function() {
     pinButton.style.cursor = 'pointer';
     
     pinButton.addEventListener('click', function() {
-      // 创建一个新的固定窗口
+      // Create a new detached window
       chrome.windows.create({
         url: chrome.runtime.getURL('popup.html') + '?detached=true',
         type: 'popup',
         width: 420,
         height: 350
       }, function() {
-        // 创建新窗口后关闭当前popup
+        // Close current popup after creating new window
         window.close();
       });
     });
@@ -91,60 +91,60 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 设置实时更新
   function setupLiveUpdates() {
-    // 监听来自content script的消息
+    // Listen for messages from content script
     chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-      // 更新鼠标事件
+      // Update mouse events
       if (message.action === 'updateMouseEvents') {
         displayMouseEvents(message.events);
       }
       
-      // 更新选中的文本
+      // Update selected text
       else if (message.action === 'updateSelectedText') {
         displaySelectedText(message.text);
       }
       
-      // 必须返回true以保持消息端口开放，实现异步响应
+      // Must return true to keep message port open for async response
       return true;
     });
     
-    updateStatus.textContent = '实时更新已启用 - ' + new Date().toLocaleTimeString();
+    updateStatus.textContent = 'Live updates enabled - ' + new Date().toLocaleTimeString();
   }
   
   // 显示鼠标事件
   function displayMouseEvents(events) {
     if (!events || events.length === 0) {
-      eventsContainer.innerHTML = '<div class="status">尚未捕获到鼠标事件</div>';
+      eventsContainer.innerHTML = '<div class="status">No mouse events captured yet</div>';
       return;
     }
     
-    // 清空容器
+    // Clear container
     eventsContainer.innerHTML = '';
     
-    // 显示最近的10个事件（倒序）
+    // Display last 10 events (in reverse order)
     const recentEvents = events.slice(-10).reverse();
     
     recentEvents.forEach(function(event) {
       const eventElement = document.createElement('div');
       eventElement.className = 'event-item';
       
-      // 格式化时间
+      // Format time
       const date = new Date(event.timestamp);
       const timeString = date.toLocaleTimeString() + '.' + date.getMilliseconds().toString().padStart(3, '0');
       
-      // 根据事件类型显示不同的信息
+      // Display different information based on event type
       let eventInfo = '';
       switch(event.type) {
         case 'mousemove':
-          eventInfo = `移动: (${event.x}, ${event.y})`;
+          eventInfo = `Move: (${event.x}, ${event.y})`;
           break;
         case 'click':
-          eventInfo = `点击: (${event.x}, ${event.y}) 按钮: ${getButtonName(event.button)}`;
+          eventInfo = `Click: (${event.x}, ${event.y}) Button: ${getButtonName(event.button)}`;
           break;
         case 'mousedown':
-          eventInfo = `按下: (${event.x}, ${event.y}) 按钮: ${getButtonName(event.button)}`;
+          eventInfo = `Down: (${event.x}, ${event.y}) Button: ${getButtonName(event.button)}`;
           break;
         case 'mouseup':
-          eventInfo = `释放: (${event.x}, ${event.y}) 按钮: ${getButtonName(event.button)}`;
+          eventInfo = `Up: (${event.x}, ${event.y}) Button: ${getButtonName(event.button)}`;
           break;
         default:
           eventInfo = `${event.type}: (${event.x}, ${event.y})`;
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // 显示选中的文本
   function displaySelectedText(text) {
     if (!text || text.trim() === '') {
-      selectedTextContainer.innerHTML = '<div class="status">尚未选中任何文本</div>';
+      selectedTextContainer.innerHTML = '<div class="status">No text selected</div>';
       return;
     }
     
@@ -168,9 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // 获取鼠标按钮名称
   function getButtonName(button) {
     switch(button) {
-      case 0: return '左键';
-      case 1: return '中键';
-      case 2: return '右键';
+      case 0: return 'Left';
+      case 1: return 'Middle';
+      case 2: return 'Right';
       default: return button;
     }
   }

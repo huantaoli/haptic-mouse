@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Haptic Mouse 测试页面</title>
+  <title>Haptic Mouse Test Page</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -70,38 +70,38 @@
   </style>
 </head>
 <body>
-  <h1>Haptic Mouse 测试页面</h1>
+  <h1>Haptic Mouse Test Page</h1>
   
   <div class="instructions">
-    <h2>使用说明</h2>
+    <h2>Instructions</h2>
     <ul>
-      <li>在下方测试区域内移动鼠标，点击或拖动选择文本</li>
-      <li>所有鼠标事件将被记录并显示在"鼠标事件"部分</li>
-      <li>选中的文本将显示在"选中的文本"部分</li>
+      <li>Move your mouse, click or drag to select text in the test area below</li>
+      <li>All mouse events will be recorded and displayed in the "Mouse Events" section</li>
+      <li>Selected text will be shown in the "Selected Text" section</li>
     </ul>
   </div>
   
   <div class="test-area">
-    <h3>测试区域</h3>
-    <p>在此区域内移动鼠标，点击或选择文本。尝试不同的鼠标操作，观察下方的事件记录。</p>
-    <p>你可以选择这段文字，看看选中的文本会如何显示在下方的文本区域中。</p>
+    <h3>Test Area</h3>
+    <p>Move your mouse, click or select text in this area. Try different mouse operations and observe the event log below.</p>
+    <p>You can select this text to see how the selected text appears in the text area below.</p>
   </div>
   
   <div class="section">
-    <h2>鼠标事件</h2>
+    <h2>Mouse Events</h2>
     <div id="events" class="events-container">
-      <div class="status">等待鼠标事件...</div>
+      <div class="status">Waiting for mouse events...</div>
     </div>
   </div>
   
   <div class="section">
-    <h2>选中的文本</h2>
+    <h2>Selected Text</h2>
     <div id="selected-text" class="text-container">
-      <div class="status">尚未选中任何文本</div>
+      <div class="status">No text selected</div>
     </div>
   </div>
   
-  <div class="status" id="update-status">实时更新已启用</div>
+  <div class="status" id="update-status">Real-time updates enabled</div>
   
   <script src="index.js"></script>
 </body>

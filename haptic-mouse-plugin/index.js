@@ -1,30 +1,36 @@
-// 存储鼠标事件和选中文本的数据
+// Store mouse events and selected text data
 let mouseEvents = [];
 let selectedText = '';
 
-// 最大存储的鼠标事件数量
+// Maximum number of stored mouse events
 const MAX_EVENTS = 50;
 
-// 当页面加载完成时执行
+// Execute when page is loaded
 document.addEventListener('DOMContentLoaded', function() {
-  // 获取DOM元素
+  // Get DOM elements
   const eventsContainer = document.getElementById('events');
   const selectedTextContainer = document.getElementById('selected-text');
   const updateStatus = document.getElementById('update-status');
   
-  // 监听鼠标事件
+  // Listen for mouse events
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('click', handleMouseClick);
   document.addEventListener('mousedown', handleMouseDown);
   document.addEventListener('mouseup', handleMouseUp);
+  document.addEventListener('dblclick', handleDblClick);
+  document.addEventListener('mouseenter', handleMouseEnter);
+  document.addEventListener('mouseleave', handleMouseLeave);
+  document.addEventListener('mouseover', handleMouseOver);
+  document.addEventListener('mouseout', handleMouseOut);
+  document.addEventListener('contextmenu', handleContextMenu);
   
-  // 监听文本选择事件
+  // Listen for text selection events
   document.addEventListener('selectionchange', handleSelectionChange);
   
-  // 更新状态信息
-  updateStatus.textContent = '实时更新已启用 - ' + new Date().toLocaleTimeString();
+  // Update status information
+  updateStatus.textContent = 'Real-time update enabled - ' + new Date().toLocaleTimeString();
   
-  // 处理鼠标移动事件
+  // Handle mouse move events
   function handleMouseMove(event) {
     addMouseEvent({
       type: 'mousemove',
@@ -34,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // 处理鼠标点击事件
+  // Handle mouse click events
   function handleMouseClick(event) {
     addMouseEvent({
       type: 'click',
@@ -45,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // 处理鼠标按下事件
+  // Handle mouse down events
   function handleMouseDown(event) {
     addMouseEvent({
       type: 'mousedown',
@@ -56,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // 处理鼠标释放事件
+  // Handle mouse up events
   function handleMouseUp(event) {
     addMouseEvent({
       type: 'mouseup',
@@ -66,62 +72,148 @@ document.addEventListener('DOMContentLoaded', function() {
       timestamp: new Date().getTime()
     });
   }
+
+  // Handle double click events
+  function handleDblClick(event) {
+    addMouseEvent({
+      type: 'dblclick',
+      x: event.clientX,
+      y: event.clientY,
+      timestamp: new Date().getTime()
+    });
+  }
+
+  // Handle mouse enter events
+  function handleMouseEnter(event) {
+    addMouseEvent({
+      type: 'mouseenter',
+      x: event.clientX,
+      y: event.clientY,
+      target: event.target.tagName,
+      timestamp: new Date().getTime()
+    });
+  }
+
+  // Handle mouse leave events
+  function handleMouseLeave(event) {
+    addMouseEvent({
+      type: 'mouseleave',
+      x: event.clientX,
+      y: event.clientY,
+      target: event.target.tagName,
+      timestamp: new Date().getTime()
+    });
+  }
+
+  // Handle mouse over events
+  function handleMouseOver(event) {
+    addMouseEvent({
+      type: 'mouseover',
+      x: event.clientX,
+      y: event.clientY,
+      target: event.target.tagName,
+      relatedTarget: event.relatedTarget ? event.relatedTarget.tagName : null,
+      timestamp: new Date().getTime()
+    });
+  }
+
+  // Handle mouse out events
+  function handleMouseOut(event) {
+    addMouseEvent({
+      type: 'mouseout',
+      x: event.clientX,
+      y: event.clientY,
+      target: event.target.tagName,
+      relatedTarget: event.relatedTarget ? event.relatedTarget.tagName : null,
+      timestamp: new Date().getTime()
+    });
+  }
+
+  // Handle context menu events
+  function handleContextMenu(event) {
+    event.preventDefault(); // Prevent default context menu
+    addMouseEvent({
+      type: 'contextmenu',
+      x: event.clientX,
+      y: event.clientY,
+      button: event.button,
+      timestamp: new Date().getTime()
+    });
+  }
   
-  // 处理文本选择事件
+  // Handle text selection events
   function handleSelectionChange() {
     const selection = window.getSelection();
     selectedText = selection.toString();
     displaySelectedText(selectedText);
   }
   
-  // 添加鼠标事件到数组并显示
+  // Add mouse event to array and display
   function addMouseEvent(event) {
     mouseEvents.push(event);
     
-    // 限制存储的事件数量
+    // Limit number of stored events
     if (mouseEvents.length > MAX_EVENTS) {
       mouseEvents.shift();
     }
     
-    // 显示鼠标事件
+    // Display mouse events
     displayMouseEvents(mouseEvents);
   }
   
-  // 显示鼠标事件
+  // Display mouse events
   function displayMouseEvents(events) {
     if (!events || events.length === 0) {
-      eventsContainer.innerHTML = '<div class="status">尚未捕获到鼠标事件</div>';
+      eventsContainer.innerHTML = '<div class="status">No mouse events captured yet</div>';
       return;
     }
     
-    // 清空容器
+    // Clear container
     eventsContainer.innerHTML = '';
     
-    // 显示最近的10个事件（倒序）
+    // Display last 10 events (in reverse order)
     const recentEvents = events.slice(-10).reverse();
     
     recentEvents.forEach(function(event) {
       const eventElement = document.createElement('div');
       eventElement.className = 'event-item';
       
-      // 格式化时间
+      // Format time
       const date = new Date(event.timestamp);
       const timeString = date.toLocaleTimeString() + '.' + date.getMilliseconds().toString().padStart(3, '0');
       
-      // 根据事件类型显示不同的信息
+      // Display different information based on event type
       let eventInfo = '';
       switch(event.type) {
         case 'mousemove':
-          eventInfo = `移动: (${event.x}, ${event.y})`;
+          eventInfo = `Move: (${event.x}, ${event.y})`;
           break;
         case 'click':
-          eventInfo = `点击: (${event.x}, ${event.y}) 按钮: ${getButtonName(event.button)}`;
+          eventInfo = `Click: (${event.x}, ${event.y}) Button: ${getButtonName(event.button)}`;
           break;
         case 'mousedown':
-          eventInfo = `按下: (${event.x}, ${event.y}) 按钮: ${getButtonName(event.button)}`;
+          eventInfo = `Down: (${event.x}, ${event.y}) Button: ${getButtonName(event.button)}`;
           break;
         case 'mouseup':
-          eventInfo = `释放: (${event.x}, ${event.y}) 按钮: ${getButtonName(event.button)}`;
+          eventInfo = `Up: (${event.x}, ${event.y}) Button: ${getButtonName(event.button)}`;
+          break;
+        case 'dblclick':
+          eventInfo = `Double Click: (${event.x}, ${event.y})`;
+          break;
+        case 'mouseenter':
+          eventInfo = `Enter Element: (${event.x}, ${event.y}) Target: ${event.target}`;
+          break;
+        case 'mouseleave':
+          eventInfo = `Leave Element: (${event.x}, ${event.y}) Target: ${event.target}`;
+          break;
+        case 'mouseover':
+          eventInfo = `Over: (${event.x}, ${event.y}) Target: ${event.target} From: ${event.relatedTarget || 'None'}`;
+          break;
+        case 'mouseout':
+          eventInfo = `Out: (${event.x}, ${event.y}) Target: ${event.target} To: ${event.relatedTarget || 'None'}`;
+          break;
+        case 'contextmenu':
+          eventInfo = `Context Menu: (${event.x}, ${event.y})`;
           break;
         default:
           eventInfo = `${event.type}: (${event.x}, ${event.y})`;
@@ -135,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // 显示选中的文本
   function displaySelectedText(text) {
     if (!text || text.trim() === '') {
-      selectedTextContainer.innerHTML = '<div class="status">尚未选中任何文本</div>';
+      selectedTextContainer.innerHTML = '<div class="status">No text selected</div>';
       return;
     }
     
@@ -145,9 +237,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // 获取鼠标按钮名称
   function getButtonName(button) {
     switch(button) {
-      case 0: return '左键';
-      case 1: return '中键';
-      case 2: return '右键';
+      case 0: return 'Left';
+      case 1: return 'Middle';
+      case 2: return 'Right';
       default: return button;
     }
   }
