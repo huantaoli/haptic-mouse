@@ -1,12 +1,33 @@
 // Check if current window is detached
 let isDetachedWindow = window.location.search.includes('detached=true');
 
+// Serial port variables
+let port = null;
+let portReader = null;
+let keepReading = false;
+
+// HID device variables
+let hidDevice = null;
+let keepReadingHID = false;
+
 // Execute when popup page is loaded
 document.addEventListener('DOMContentLoaded', function() {
   // Get DOM elements
   const eventsContainer = document.getElementById('events');
   const selectedTextContainer = document.getElementById('selected-text');
   const updateStatus = document.getElementById('update-status');
+  const portList = document.getElementById('port-list');
+  const connectButton = document.getElementById('connect-button');
+  const connectionStatus = document.getElementById('connection-status');
+  const hidList = document.getElementById('hid-list');
+  const hidConnectButton = document.getElementById('hid-connect-button');
+  const hidStatus = document.getElementById('hid-status');
+
+  // Setup serial port controls
+  setupSerialPort();
+  
+  // Setup HID device controls
+  setupHIDDevice();
   
   // Add pin button if in popup mode
   if (!isDetachedWindow) {
@@ -21,6 +42,246 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // 设置打开测试页面按钮
   setupTestPageButton();
+
+  // 设置串口连接功能
+  async function setupSerialPort() {
+    // 更新可用串口列表
+    async function updatePortList() {
+      const ports = await navigator.serial.getPorts();
+      portList.innerHTML = '';
+      
+      if (ports.length === 0) {
+        const option = document.createElement('option');
+        option.textContent = 'No ports available';
+        option.disabled = true;
+        portList.appendChild(option);
+        return;
+      }
+
+      ports.forEach(port => {
+        const option = document.createElement('option');
+        option.value = port.getInfo().usbVendorId;
+        option.textContent = `Port ${port.getInfo().usbVendorId}`;
+        portList.appendChild(option);
+      });
+    }
+
+    // 初始化串口列表
+    await updatePortList();
+
+    // 连接/断开串口
+    connectButton.addEventListener('click', async () => {
+      if (!port) {
+        try {
+          // 请求串口访问权限
+          port = await navigator.serial.requestPort();
+          await port.open({ baudRate: 9600 });
+          
+          connectButton.textContent = 'Disconnect';
+          connectButton.style.backgroundColor = '#db4437';
+          connectionStatus.textContent = 'Connected';
+          
+          // 开始读取串口数据
+          keepReading = true;
+          portReader = port.readable.getReader();
+          readSerialData();
+        } catch (error) {
+          console.error('Error opening serial port:', error);
+          connectionStatus.textContent = `Error: ${error.message}`;
+        }
+      } else {
+        // 断开连接
+        try {
+          keepReading = false;
+          if (portReader) {
+            await portReader.cancel();
+            await portReader.releaseLock();
+          }
+          await port.close();
+          port = null;
+          
+          connectButton.textContent = 'Connect';
+          connectButton.style.backgroundColor = '#4285f4';
+          connectionStatus.textContent = 'Disconnected';
+        } catch (error) {
+          console.error('Error closing serial port:', error);
+          connectionStatus.textContent = `Error: ${error.message}`;
+        }
+      }
+    });
+  }
+
+  // 设置HID设备连接功能
+  async function setupHIDDevice() {
+    // 更新可用HID设备列表
+    async function updateHIDList() {
+      const devices = await navigator.hid.getDevices();
+      hidList.innerHTML = '';
+      
+      if (devices.length === 0) {
+        const option = document.createElement('option');
+        option.textContent = 'No HID devices available';
+        option.disabled = true;
+        hidList.appendChild(option);
+        return;
+      }
+
+      devices.forEach(device => {
+        const option = document.createElement('option');
+        option.value = device.productId;
+        option.textContent = `${device.productName || 'Unknown Device'} (${device.productId})`;
+        hidList.appendChild(option);
+      });
+    }
+
+    // 初始化HID设备列表
+    await updateHIDList();
+
+    // 连接/断开HID设备
+    hidConnectButton.addEventListener('click', async () => {
+      if (!hidDevice) {
+        try {
+          // 请求HID设备访问权限
+          const devices = await navigator.hid.requestDevice({
+            filters: [] // 允许选择任何HID设备
+          });
+          
+          if (devices.length > 0) {
+            hidDevice = devices[0];
+            await hidDevice.open();
+            
+            hidConnectButton.textContent = 'Disconnect';
+            hidConnectButton.style.backgroundColor = '#db4437';
+            hidStatus.textContent = 'Connected';
+            
+            // 开始读取HID数据
+            keepReadingHID = true;
+            readHIDData();
+          }
+        } catch (error) {
+          console.error('Error opening HID device:', error);
+          hidStatus.textContent = `Error: ${error.message}`;
+        }
+      } else {
+        // 断开连接
+        try {
+          keepReadingHID = false;
+          await hidDevice.close();
+          hidDevice = null;
+          
+          hidConnectButton.textContent = 'Connect';
+          hidConnectButton.style.backgroundColor = '#4285f4';
+          hidStatus.textContent = 'Disconnected';
+        } catch (error) {
+          console.error('Error closing HID device:', error);
+          hidStatus.textContent = `Error: ${error.message}`;
+        }
+      }
+    });
+  }
+
+  // 读取HID数据
+  async function readHIDData() {
+    while (hidDevice && keepReadingHID) {
+      try {
+        hidDevice.addEventListener('inputreport', event => {
+          const { data, reportId } = event;
+          console.log('HID Input Report:', {
+            reportId,
+            data: new Uint8Array(data.buffer)
+          });
+        });
+      } catch (error) {
+        console.error('Error reading HID data:', error);
+        break;
+      }
+    }
+  }
+
+  // 设置串口连接功能
+  async function setupSerialPort() {
+    // 更新可用串口列表
+    async function updatePortList() {
+      const ports = await navigator.serial.getPorts();
+      portList.innerHTML = '';
+      
+      if (ports.length === 0) {
+        const option = document.createElement('option');
+        option.textContent = 'No ports available';
+        option.disabled = true;
+        portList.appendChild(option);
+        return;
+      }
+
+      ports.forEach(port => {
+        const option = document.createElement('option');
+        option.value = port.getInfo().usbVendorId;
+        option.textContent = `Port ${port.getInfo().usbVendorId}`;
+        portList.appendChild(option);
+      });
+    }
+
+    // 初始化串口列表
+    await updatePortList();
+
+    // 连接/断开串口
+    connectButton.addEventListener('click', async () => {
+      if (!port) {
+        try {
+          // 请求串口访问权限
+          port = await navigator.serial.requestPort();
+          await port.open({ baudRate: 9600 });
+          
+          connectButton.textContent = 'Disconnect';
+          connectButton.style.backgroundColor = '#db4437';
+          connectionStatus.textContent = 'Connected';
+          
+          // 开始读取串口数据
+          keepReading = true;
+          portReader = port.readable.getReader();
+          readSerialData();
+        } catch (error) {
+          console.error('Error opening serial port:', error);
+          connectionStatus.textContent = `Error: ${error.message}`;
+        }
+      } else {
+        // 断开连接
+        try {
+          keepReading = false;
+          if (portReader) {
+            await portReader.cancel();
+            await portReader.releaseLock();
+          }
+          await port.close();
+          port = null;
+          
+          connectButton.textContent = 'Connect';
+          connectButton.style.backgroundColor = '#4285f4';
+          connectionStatus.textContent = 'Disconnected';
+        } catch (error) {
+          console.error('Error closing serial port:', error);
+          connectionStatus.textContent = `Error: ${error.message}`;
+        }
+      }
+    });
+  }
+
+  // 读取串口数据
+  async function readSerialData() {
+    while (port && keepReading) {
+      try {
+        const { value, done } = await portReader.read();
+        if (done) {
+          break;
+        }
+        // 处理接收到的数据
+        console.log('Received:', new TextDecoder().decode(value));
+      } catch (error) {
+        console.error('Error reading serial data:', error);
+        break;
+      }
+    }
+  }
   
   // 设置测试页面按钮点击事件
   function setupTestPageButton() {

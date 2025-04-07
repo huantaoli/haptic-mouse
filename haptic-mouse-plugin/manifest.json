@@ -3,7 +3,7 @@
   "name": "Haptic Mouse",
   "version": "1.0",
   "description": "捕获鼠标事件和选中文本的浏览器插件",
-  "permissions": ["activeTab", "storage", "windows"],
+  "permissions": ["activeTab", "storage", "windows", "serial", "hid"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
