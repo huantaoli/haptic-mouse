@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebHID设备列表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #deviceList {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .device-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .device-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebHID设备列表</h1>
+    <button id="requestButton">请求设备列表</button>
+    <div id="deviceList"></div>
+    
+    <!-- 新增的指令发送区域 -->
+    <div id="commandSection" style="margin-top: 20px; display: none;">
+        <h2>发送触觉指令</h2>
+        <div>
+            <label for="intensityInput">强度 (0-255): </label>
+            <input type="number" id="intensityInput" min="0" max="255" value="128">
+            <button id="sendButton">发送指令</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedDevice = null;
+        
+        document.getElementById('requestButton').addEventListener('click', async () => {
+            try {
+                // 检查浏览器是否支持WebHID
+                if (!('hid' in navigator)) {
+                    throw new Error('您的浏览器不支持WebHID API');
+                }
+
+                // 请求设备权限并获取设备列表
+                const devices = await navigator.hid.requestDevice({
+                    filters: [] // 空数组表示获取所有HID设备
+                });
+
+                // 显示设备列表
+                const deviceListElement = document.getElementById('deviceList');
+                deviceListElement.innerHTML = '';
+                
+                if (devices.length === 0) {
+                    deviceListElement.innerHTML = '<p>未找到任何HID设备</p>';
+                    return;
+                }
+
+                // 更新选中的设备并打开连接
+                selectedDevice = devices[0]; // 默认选择第一个设备
+                
+                // 检查设备是否已打开，如果没有则打开
+                if (!selectedDevice.opened) {
+                    await selectedDevice.open();
+                }
+                
+                console.log('设备已连接:', selectedDevice);
+                document.getElementById('commandSection').style.display = 'block';
+
+                devices.forEach(device => {
+                    const deviceElement = document.createElement('div');
+                    deviceElement.className = 'device-item';
+                    deviceElement.innerHTML = `
+                        <p><strong>产品名称:</strong> ${device.productName || '未知'}</p>
+                        <p><strong>厂商ID:</strong> 0x${device.vendorId.toString(16)}</p>
+                        <p><strong>产品ID:</strong> 0x${device.productId.toString(16)}</p>
+                    `;
+                    deviceListElement.appendChild(deviceElement);
+                });
+            } catch (error) {
+                alert(`错误: ${error.message}`);
+            }
+        });
+
+        // 新增的发送指令功能
+        document.getElementById('sendButton').addEventListener('click', async () => {
+            if (!selectedDevice) {
+                alert('请先选择设备');
+                return;
+            }
+
+            try {
+                // 确保设备仍然处于打开状态
+                if (!selectedDevice.opened) {
+                    await selectedDevice.open();
+                }
+                
+                const intensity = parseInt(document.getElementById('intensityInput').value);
+                if (isNaN(intensity) || intensity < 0 || intensity > 255) {
+                    throw new Error('请输入0-255之间的有效数值');
+                }
+
+                // 创建报告数据 (根据您提供的HID描述符)
+                const reportId = 0x10; // 报告ID
+                
+                // 修改：只发送强度值，不包含报告ID在数据中
+                const data = new Uint8Array([intensity]);
+                
+                console.log(`发送报告: ID=${reportId}, 数据=`, data);
+                
+                // 发送指令到设备
+                await selectedDevice.sendReport(reportId, data);
+                console.log('指令发送成功');
+            } catch (error) {
+                console.error('发送指令失败:', error);
+                alert(`发送指令失败: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -35,5 +35,9 @@
         "tuple": "cpp",
         "type_traits": "cpp"
     },
-    "editor.tabSize": 4
+    "editor.tabSize": 4,
+    "idf.espIdfPathWin": "C:\\Users\\lihua\\esp\\v5.4.1\\esp-idf",
+    "idf.toolsPathWin": "C:\\Users\\lihua\\.espressif",
+    "idf.pythonInstallPath": "C:\\Users\\lihua\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
+    "idf.portWin": "COM6"
 }

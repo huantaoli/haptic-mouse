@@ -1,0 +1,29 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "idf.espIdfPathWin": "C:\\Users\\lihua\\esp\\v5.4.1\\esp-idf",
+    "idf.toolsPathWin": "C:\\Users\\lihua\\.espressif",
+    "idf.pythonInstallPath": "C:\\Users\\lihua\\.espressif\\tools\\idf-python\\3.11.2\\python.exe",
+    "idf.portWin": "COM6",
+    "idf.customExtraVars": {
+        "OPENOCD_SCRIPTS": "C:\\Users\\lihua\\.espressif\\tools\\openocd-esp32\\v0.12.0-esp32-20240318/openocd-esp32/share/openocd/scripts",
+        "IDF_CCACHE_ENABLE": "1",
+        "ESP_ROM_ELF_DIR": "C:\\Users\\lihua\\.espressif\\tools\\esp-rom-elfs\\20240305/",
+        "IDF_TARGET": "esp32s3"
+    },
+    "idf.openOcdConfigs": [
+        "board/esp32s3-builtin.cfg"
+    ],
+    "idf.flashType": "UART",
+    "files.associations": {
+        "format": "c",
+        "array": "c",
+        "charconv": "c",
+        "compare": "c",
+        "functional": "c",
+        "ratio": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "variant": "c"
+    }
+}
