@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "HTML Content Inserter",
   "version": "1.0",
-  "description": "向网页中插入HTML内容的Chrome插件",
+  "description": "A Chrome extension for inserting HTML content into web pages",
   "permissions": [
     "activeTab",
     "scripting",

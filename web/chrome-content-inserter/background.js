@@ -1,4 +1,4 @@
-// 监听来自content script的消息
+// listens for messages from content.js
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'updateIcon') {
     const iconPath = {

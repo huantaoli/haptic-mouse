@@ -1,4 +1,4 @@
-// 获取并显示设备信息
+// Get and display device information
 function updateDeviceList() {
   chrome.storage.local.get(['connectedHIDDevices'], function(result) {
     const deviceList = document.getElementById('deviceList');
@@ -7,10 +7,10 @@ function updateDeviceList() {
     if (devices && devices.length > 0) {
       deviceList.innerHTML = devices.map(device => `
         <div class="device-item">
-          <div>${device.productName || '未知设备'}</div>
-          <div>厂商ID: <span style="color: #0366d6">${device.vendorId}</span></div>
-          <div>产品ID: <span style="color: #0366d6">${device.productId}</span></div>
-          <div>制造商: ${device.manufacturerName || '未知制造商'}</div>
+          <div>${device.productName || 'Unknown Device'}</div>
+          <div>Vendor ID: <span style="color: #0366d6">${device.vendorId}</span></div>
+          <div>Product ID: <span style="color: #0366d6">${device.productId}</span></div>
+          <div>Manufacturer: ${device.manufacturerName || 'Unknown Manufacturer'}</div>
         </div>
       `).join('');
     } else {
@@ -19,8 +19,8 @@ function updateDeviceList() {
   });
 }
 
-// 页面加载时更新设备列表
+// Update device list when page loads
 document.addEventListener('DOMContentLoaded', updateDeviceList);
 
-// 每秒更新一次设备列表
+// Update device list every second
 setInterval(updateDeviceList, 1000);

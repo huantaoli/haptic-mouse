@@ -1,7 +1,7 @@
-// 存储当前连接的设备
+// Store current connected device
 let currentDevice = null;
 
-// 断开设备连接
+// Disconnect device
 async function disconnectDevice() {
   if (currentDevice && currentDevice.opened) {
     await currentDevice.close();
@@ -9,11 +9,11 @@ async function disconnectDevice() {
   currentDevice = null;
   chrome.storage.local.remove('connectedHIDDevices');
   updateExtensionIcon(false);
-  floatingButton.textContent = '连接HID设备';
+  floatingButton.textContent = 'Connect HID Device';
   floatingButton.style.backgroundColor = '#2196F3';
 }
 
-// 更新扩展图标
+// Update extension icon
 function updateExtensionIcon(connected) {
   chrome.runtime.sendMessage({
     action: 'updateIcon',
@@ -21,9 +21,9 @@ function updateExtensionIcon(connected) {
   });
 }
 
-// 创建浮动按钮
+// Create floating button
 const floatingButton = document.createElement('button');
-floatingButton.textContent = '连接HID设备';
+floatingButton.textContent = 'Connect HID Device';
 floatingButton.style.cssText = `
   position: fixed;
   bottom: 20px;
@@ -39,24 +39,24 @@ floatingButton.style.cssText = `
   transition: background-color 0.3s ease;
 `;
 
-// 添加点击事件处理HID设备请求
+// Add click event handler for HID device request
 floatingButton.addEventListener('click', async () => {
   try {
-    // 如果已经有连接的设备，先断开它
+    // If a device is already connected, disconnect it first
     if (currentDevice) {
       await disconnectDevice();
       return;
     }
 
     const devices = await navigator.hid.requestDevice({
-      filters: [] // 空数组表示接受所有HID设备
+      filters: [] // Empty array accepts all HID devices
     });
     
     if (devices.length > 0) {
-      // 只取第一个设备
+      // Take only the first device
       const device = devices[0];
       
-      // 尝试打开设备连接
+      // Try to open device connection
       await device.open();
       currentDevice = device;
 
@@ -64,41 +64,41 @@ floatingButton.addEventListener('click', async () => {
         productName: device.productName,
         vendorId: device.vendorId,
         productId: device.productId,
-        manufacturerName: device.manufacturerName || '未知制造商'
+        manufacturerName: device.manufacturerName || 'Unknown Manufacturer'
       };
       
-      // 存储设备信息到chrome.storage
+      // Store device info in chrome.storage
       chrome.storage.local.set({ 'connectedHIDDevices': [deviceInfo] });
-      console.log('已连接HID设备:', deviceInfo);
+      console.log('HID device connected:', deviceInfo);
       
-      // 更新图标为已连接状态
+      // Update icon to connected state
       updateExtensionIcon(true);
       
-      // 更新按钮文本
-      floatingButton.textContent = '断开HID设备';
+      // Update button text
+      floatingButton.textContent = 'Disconnect HID Device';
       floatingButton.style.backgroundColor = '#45a049';
     }
   } catch (error) {
-    console.error('HID设备操作出错:', error);
+    console.error('HID device operation error:', error);
     await disconnectDevice();
   }
 });
 
-// 检查是否已有连接的设备并设置初始状态
+// Check for existing connected devices and set initial state
 chrome.storage.local.get(['connectedHIDDevices'], function(result) {
   const hasConnectedDevices = result.connectedHIDDevices && result.connectedHIDDevices.length > 0;
   updateExtensionIcon(hasConnectedDevices);
   
   if (hasConnectedDevices) {
-    floatingButton.textContent = '断开HID设备';
+    floatingButton.textContent = 'Disconnect HID Device';
     floatingButton.style.backgroundColor = '#45a049';
   }
 });
 
-// 将按钮添加到页面
+// Add button to page
 document.body.appendChild(floatingButton);
 
-// 监听来自popup的消息
+// Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'insertHTML') {
     const div = document.createElement('div');
