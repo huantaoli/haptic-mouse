@@ -1,93 +1,74 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
-  <title>Haptic Mouse</title>
   <style>
     body {
-      width: 400px;
-      min-height: 300px;
-      font-family: Arial, sans-serif;
+      width: 320px;
+      padding: 16px;
       margin: 0;
-      padding: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f8f9fa;
     }
-    h1 {
+
+    #deviceInfo {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 16px;
+    }
+
+    h3 {
+      margin: 0 0 16px 0;
+      color: #1a73e8;
       font-size: 18px;
-      margin-top: 0;
-      color: #333;
+      font-weight: 500;
     }
-    .section {
-      margin-bottom: 15px;
+
+    .device-item {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #e1e4e8;
+      transition: all 0.2s ease;
     }
-    .events-container {
-      max-height: 200px;
-      overflow-y: auto;
-      border: 1px solid #ddd;
-      padding: 8px;
-      background-color: #f9f9f9;
+
+    .device-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
-    .event-item {
-      margin-bottom: 5px;
-      padding: 5px;
-      border-bottom: 1px solid #eee;
-      font-size: 12px;
+
+    .device-item div {
+      margin: 4px 0;
+      color: #24292e;
+      font-size: 14px;
     }
-    .text-container {
-      min-height: 60px;
-      border: 1px solid #ddd;
-      padding: 8px;
-      background-color: #f9f9f9;
-      word-wrap: break-word;
+
+    .device-item div:first-child {
+      color: #1a73e8;
+      font-weight: 500;
+      font-size: 15px;
     }
-    .status {
-      font-size: 11px;
+
+    #deviceList:empty::before {
+      content: 'No device connected';
       color: #666;
-      margin-top: 5px;
       font-style: italic;
+      display: block;
+      text-align: center;
+      padding: 20px 0;
     }
   </style>
 </head>
+
 <body>
-  <h1>Haptic Mouse Plugin</h1>
-  
-  <div class="section">
-    <h2>Mouse Events</h2>
-    <div id="events" class="events-container">
-      <div class="status">Waiting for mouse events...</div>
-    </div>
+  <div id="deviceInfo">
+    <h3>Connected HID Devices</h3>
+    <div id="deviceList"></div>
   </div>
-  
-  <div class="section">
-    <h2>Selected Text</h2>
-    <div id="selected-text" class="text-container">
-      <div class="status">No text selected</div>
-    </div>
-  </div>
-  
-  <div class="section">
-    <h2>Device Control</h2>
-    <div class="device-controls">
-      <div class="serial-controls">
-        <h3>Serial Port</h3>
-        <select id="port-list" style="padding: 5px; margin-right: 10px;"></select>
-        <button id="connect-button" style="padding: 8px 15px; background-color: #4285f4; color: white; border: none; border-radius: 4px; cursor: pointer;">Connect</button>
-        <div id="connection-status" class="status">Not connected</div>
-      </div>
-      <div class="hid-controls">
-        <h3>HID Device</h3>
-        <select id="hid-list" style="padding: 5px; margin-right: 10px;"></select>
-        <button id="hid-connect-button" style="padding: 8px 15px; background-color: #4285f4; color: white; border: none; border-radius: 4px; cursor: pointer;">Connect</button>
-        <div id="hid-status" class="status">Not connected</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <button id="open-test-page" style="padding: 8px 15px; background-color: #4285f4; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">Open Test Page</button>
-  </div>
-
-  <div class="status" id="update-status">Live updates enabled</div>
-  
   <script src="popup.js"></script>
 </body>
+
 </html>
