@@ -26,8 +26,8 @@
 
 static const char *TAG = "app_main";
 
-// DRV2605 handle
-drv2605_handle_t drv2605_handle;
+// the queue handle
+static QueueHandle_t hid_evt_queue = NULL;
 
 /************* TinyUSB descriptors ****************/
 
@@ -59,9 +59,9 @@ const char* hid_string_descriptor[5] = {
     // array of pointer to string descriptors
     (char[]){0x09, 0x04},  // 0: is supported language is English (0x0409)
     "TinyUSB",             // 1: Manufacturer
-    "TinyUSB Device",      // 2: Product
+    "Haptic Mouse",      // 2: Product
     "123456",              // 3: Serials, should use chip ID
-    "Example HID interface",  // 4: HID
+    "HID interface",  // 4: HID
 };
 
 /**
@@ -106,16 +106,11 @@ uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_t
 void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t const* buffer, uint16_t bufsize)
 {
     if (report_type == HID_REPORT_TYPE_OUTPUT && report_id == 0x10 && bufsize >= 1) {
-        ESP_LOGI("HID_set_cb", "Received HID: %d", buffer[0]);
-        ESP_LOGI("drv2605", "Play %s", drv2605_effect_names[buffer[0]]);
-        // set the effect to play
-        drv2605_stop(drv2605_handle);
-        // set the waveform 
-        drv2605_set_waveform(drv2605_handle, 0, buffer[0]);
-        // end waveform
-        drv2605_set_waveform(drv2605_handle, 1, 0);
-        // play the effect!
-        drv2605_go(drv2605_handle);
+        // send the effect to the queue for procession
+        uint8_t effect = buffer[0];
+        if (hid_evt_queue) {
+            xQueueSendFromISR(hid_evt_queue, &effect, NULL);
+        }
     }
 }
 
@@ -142,6 +137,8 @@ void app_main(void)
         .drv2605_device.scl_speed_hz = 400000,
         .drv2605_device.device_address = DRV2605_ADDR,
     };
+    // DRV2605 handle
+    drv2605_handle_t drv2605_handle;
 
     ESP_ERROR_CHECK(drv2605_init(bus_handle, &drv2605_config, &drv2605_handle));
     ESP_LOGI(TAG, "DRV2605 initialization DONE");
@@ -168,7 +165,20 @@ void app_main(void)
     ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
     ESP_LOGI(TAG, "USB initialization DONE");
 
+    hid_evt_queue = xQueueCreate(10, sizeof(uint8_t));
+
     while (1) {
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        uint8_t effect;
+        if (xQueueReceive(hid_evt_queue, &effect, pdMS_TO_TICKS(100))) {
+            ESP_LOGI("drv2605", "Play %s", drv2605_effect_names[effect]);
+            // set the effect to play
+            drv2605_stop(drv2605_handle);
+            // set the waveform 
+            drv2605_set_waveform(drv2605_handle, 0, effect);
+            // end waveform
+            drv2605_set_waveform(drv2605_handle, 1, 0);
+            // play the effect!
+            drv2605_go(drv2605_handle);
+        }
     }
 }
