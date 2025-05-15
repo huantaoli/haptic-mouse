@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>交互测试页面</title>
+    <title>Interaction Test Page</title>
     <style>
+        #deviceList {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .device-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .device-item:last-child {
+            border-bottom: none;
+        }
+
         body {
             font-family: 'Microsoft YaHei', Arial, sans-serif;
             max-width: 800px;
@@ -12,28 +29,28 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
-        
+
         h1 {
             color: #333;
             text-align: center;
             margin-bottom: 30px;
         }
-        
+
         .test-section {
             background-color: white;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
+
         h2 {
             color: #2c3e50;
             border-bottom: 2px solid #eee;
             padding-bottom: 10px;
             margin-top: 0;
         }
-        
+
         /* 按钮测试样式 */
         #testButton {
             padding: 12px 24px;
@@ -45,11 +62,11 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        
+
         #testButton:hover {
             background-color: #2980b9;
         }
-        
+
         #buttonResult {
             margin-top: 15px;
             padding: 10px;
@@ -57,7 +74,7 @@
             border-radius: 4px;
             min-height: 20px;
         }
-        
+
         /* 滚动区域样式 */
         #scrollArea {
             height: 200px;
@@ -67,7 +84,7 @@
             border-radius: 4px;
             background-color: #fafafa;
         }
-        
+
         .scroll-content {
             height: 800px;
             background: linear-gradient(to bottom, #e1f5fe, #b3e5fc);
@@ -76,7 +93,7 @@
             justify-content: space-between;
             padding: 20px;
         }
-        
+
         #scrollResult {
             margin-top: 15px;
             padding: 10px;
@@ -84,7 +101,7 @@
             border-radius: 4px;
             min-height: 20px;
         }
-        
+
         /* 拖拽元素样式 */
         #dragContainer {
             position: relative;
@@ -93,7 +110,7 @@
             background-color: #fafafa;
             border-radius: 4px;
         }
-        
+
         #draggableElement {
             width: 100px;
             height: 100px;
@@ -110,9 +127,9 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        
+
         /* 吸附区域样式 */
         .snap-area {
             position: absolute;
@@ -126,29 +143,30 @@
             justify-content: center;
             color: #3498db;
             font-size: 12px;
-            pointer-events: none; /* 确保不会干扰拖拽 */
+            pointer-events: none;
+            /* 确保不会干扰拖拽 */
         }
-        
+
         #snapArea1 {
             top: 20px;
             left: 20px;
         }
-        
+
         #snapArea2 {
             top: 20px;
             right: 20px;
         }
-        
+
         #snapArea3 {
             bottom: 20px;
             left: 20px;
         }
-        
+
         #snapArea4 {
             bottom: 20px;
             right: 20px;
         }
-        
+
         #dragResult {
             margin-top: 15px;
             padding: 10px;
@@ -156,17 +174,17 @@
             border-radius: 4px;
             min-height: 20px;
         }
-        
+
         /* 悬停测试样式 */
         #hoverContainer {
             text-align: center;
             padding: 20px;
         }
-        
+
         #deleteButton {
             padding: 12px 24px;
             background-color: #f8f9fa;
-            color: #24292e;
+            color: #d73a49;
             border: 1px solid rgba(27, 31, 35, 0.15);
             border-radius: 6px;
             font-size: 14px;
@@ -174,13 +192,13 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        
+
         #deleteButton:hover {
             background-color: #d73a49;
             color: white;
             border-color: #d73a49;
         }
-        
+
         #hoverResult {
             margin-top: 15px;
             padding: 10px;
@@ -188,7 +206,7 @@
             border-radius: 4px;
             min-height: 20px;
         }
-        
+
         /* 文字选择测试样式 */
         #selectableText {
             padding: 15px;
@@ -198,7 +216,7 @@
             line-height: 1.6;
             text-align: justify;
         }
-        
+
         #selectionResult {
             margin-top: 15px;
             padding: 10px;
@@ -208,238 +226,241 @@
         }
     </style>
 </head>
+
 <body>
-    <h1>交互测试页面</h1>
-    
-    <!-- 按钮测试区域 -->
+    <h1>Interaction Test Page</h1>
+
+    <!-- Button Test Area -->
     <div class="test-section">
-        <h2>1. 按钮测试</h2>
-        <p>点击下面的按钮来测试点击事件：</p>
-        <button id="testButton">点击我</button>
-        <div id="buttonResult">结果将显示在这里...</div>
-    </div>
-    
-    <!-- 滚动区域测试 -->
-    <div class="test-section">
-        <h2>2. 滚动区域测试</h2>
-        <p>在下面的区域中滚动鼠标滚轮：</p>
-        <div id="scrollArea">
-            <div class="scroll-content">
-                <div>滚动区域顶部</div>
-                <div>滚动区域中间部分</div>
-                <div>滚动区域底部</div>
-            </div>
-        </div>
-        <div id="scrollResult">滚动结果将显示在这里...</div>
-    </div>
-    
-    <!-- 拖拽元素测试 -->
-    <div class="test-section">
-        <h2>3. 拖拽元素测试</h2>
-        <p>拖拽下面的红色方块（靠近蓝色区域时会自动吸附）：</p>
-        <div id="dragContainer">
-            <div id="draggableElement">拖拽我</div>
-            <!-- 吸附区域 -->
-            <div id="snapArea1" class="snap-area">吸附区域1</div>
-            <div id="snapArea2" class="snap-area">吸附区域2</div>
-            <div id="snapArea3" class="snap-area">吸附区域3</div>
-            <div id="snapArea4" class="snap-area">吸附区域4</div>
-        </div>
-        <div id="dragResult">拖拽结果将显示在这里...</div>
-    </div>
-    
-    <!-- 悬停测试区域 -->
-    <div class="test-section">
-        <h2>4. 悬停测试</h2>
-        <p>将鼠标悬停在下面的按钮上（类似GitHub的删除仓库按钮）：</p>
-        <div id="hoverContainer">
-            <button id="deleteButton">Delete this repository</button>
-        </div>
-        <div id="hoverResult">悬停结果将显示在这里...</div>
-    </div>
-    
-    <!-- 文字选择测试区域 -->
-    <div class="test-section">
-        <h2>5. 文字选择测试</h2>
-        <p>在下面的文本中选择一些文字：</p>
-        <div id="selectableText">
-            这是一段可以选择的文本。您可以使用鼠标在此区域中滑动选择任意文字。选择后，所选内容将实时显示在下方的结果区域中。这个测试用于验证文本选择功能是否正常工作。您可以尝试选择单个词语、整行文本或跨多行的内容。
-        </div>
-        <div id="selectionResult">选择结果将显示在这里...</div>
+        <h2>1. Button Test</h2>
+        <p>Click the button below to test click events:</p>
+        <button id="testButton" data-hm-type="button">Click Me</button>
+        <div id="buttonResult">Results will be displayed here...</div>
     </div>
 
+    <!-- Scroll Area Test -->
+    <div class="test-section">
+        <h2>2. Scroll Area Test</h2>
+        <p>Scroll with your mouse wheel in the area below:</p>
+        <div id="scrollArea" data-hm-type="scroll">
+            <div class="scroll-content">
+                <div>Scroll Area Top</div>
+                <div>Scroll Area Middle</div>
+                <div>Scroll Area Bottom</div>
+            </div>
+        </div>
+        <div id="scrollResult">Scroll results will be displayed here...</div>
+    </div>
+
+    <!-- Drag Element Test -->
+    <div class="test-section">
+        <h2>3. Drag Element Test</h2>
+        <p>Drag the red square below (it will snap to blue areas when close):</p>
+        <div id="dragContainer">
+            <div id="draggableElement" data-hm-type="drag">Drag Me</div>
+            <!-- Snap Areas -->
+            <div id="snapArea1" class="snap-area" data-hm-type="snapArea">Snap Area 1</div>
+            <div id="snapArea2" class="snap-area" data-hm-type="snapArea">Snap Area 2</div>
+            <div id="snapArea3" class="snap-area" data-hm-type="snapArea">Snap Area 3</div>
+            <div id="snapArea4" class="snap-area" data-hm-type="snapArea">Snap Area 4</div>
+        </div>
+        <div id="dragResult">Drag results will be displayed here...</div>
+    </div>
+
+    <!-- Hover Test Area -->
+    <div class="test-section">
+        <h2>4. Hover Test</h2>
+        <p>Hover over the button below (similar to GitHub's delete repository button):</p>
+        <div id="hoverContainer">
+            <button id="deleteButton" data-hm-type="warningButton">Delete this repository</button>
+        </div>
+        <div id="hoverResult">Hover results will be displayed here...</div>
+    </div>
+
+    <!-- Text Selection Test Area -->
+    <div class="test-section">
+        <h2>5. Text Selection Test</h2>
+        <p>Select some text in the area below:</p>
+        <div id="selectableText" data-hm-type="selectableText">
+            This is a selectable text. You can use your mouse to select any text in this area. After selection, the
+            selected content will be displayed in real-time in the result area below. This test is used to verify if the
+            text selection function works properly. You can try selecting single words, entire lines, or content across
+            multiple lines.
+        </div>
+        <div id="selectionResult">Selection results will be displayed here...</div>
+    </div>
     <script>
-        // 按钮测试功能
+        // Button test functionality
         const testButton = document.getElementById('testButton');
         const buttonResult = document.getElementById('buttonResult');
         let clickCount = 0;
-        
+
         testButton.addEventListener('click', () => {
             clickCount++;
-            buttonResult.textContent = `按钮被点击了 ${clickCount} 次`;
-            
-            // 改变按钮颜色以提供视觉反馈
+            buttonResult.textContent = `Button clicked ${clickCount} times`;
+
+            // Change button color for visual feedback
             testButton.style.backgroundColor = getRandomColor();
             setTimeout(() => {
                 testButton.style.backgroundColor = '#3498db';
             }, 300);
         });
-        
-        // 滚动区域测试功能
+
+        // Scroll area test functionality
         const scrollArea = document.getElementById('scrollArea');
         const scrollResult = document.getElementById('scrollResult');
-        
+
         scrollArea.addEventListener('scroll', () => {
             const scrollTop = scrollArea.scrollTop;
             const scrollHeight = scrollArea.scrollHeight;
             const clientHeight = scrollArea.clientHeight;
             const scrollPercentage = Math.round((scrollTop / (scrollHeight - clientHeight)) * 100);
-            
-            scrollResult.textContent = `滚动位置: ${scrollTop}px, 滚动百分比: ${scrollPercentage}%`;
+
+            scrollResult.textContent = `Scroll position: ${scrollTop}px, Scroll percentage: ${scrollPercentage}%`;
         });
-        
-        // 拖拽元素测试功能
+
+        // Drag element test functionality
         const draggableElement = document.getElementById('draggableElement');
         const dragContainer = document.getElementById('dragContainer');
         const dragResult = document.getElementById('dragResult');
-        
-        // 获取所有吸附区域
+
+        // Get all snap areas
         const snapAreas = document.querySelectorAll('.snap-area');
-        
+
         let isDragging = false;
         let offsetX, offsetY;
         let isSnapped = false;
         let currentSnapArea = null;
-        
-        // 吸附阈值（像素）
+
+        // Snap threshold (pixels)
         const snapThreshold = 20;
-        
+
         draggableElement.addEventListener('mousedown', (e) => {
             isDragging = true;
             isSnapped = false;
             currentSnapArea = null;
-            
-            // 计算鼠标点击位置与元素左上角的偏移
+
+            // Calculate mouse click position offset from element's top-left corner
             const rect = draggableElement.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
             offsetY = e.clientY - rect.top;
-            
-            // 添加拖动时的样式
+
+            // Add dragging styles
             draggableElement.style.opacity = '0.8';
             draggableElement.style.boxShadow = '0 8px 16px rgba(0,0,0,0.3)';
-            
-            dragResult.textContent = '开始拖拽...';
+
+            dragResult.textContent = 'Started dragging...';
         });
-        
+
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
-            
-            // 计算新位置，确保元素不超出容器边界
+
+            // Calculate new position, ensure element stays within container boundaries
             const containerRect = dragContainer.getBoundingClientRect();
             let newLeft = e.clientX - containerRect.left - offsetX;
             let newTop = e.clientY - containerRect.top - offsetY;
-            
-            // 边界检查
+
+            // Boundary check
             const elementWidth = draggableElement.offsetWidth;
             const elementHeight = draggableElement.offsetHeight;
             const containerWidth = dragContainer.offsetWidth;
             const containerHeight = dragContainer.offsetHeight;
-            
+
             newLeft = Math.max(0, Math.min(newLeft, containerWidth - elementWidth));
             newTop = Math.max(0, Math.min(newTop, containerHeight - elementHeight));
-            
-            // 检查是否需要吸附到某个区域
+
+            // Check if element should snap to an area
             isSnapped = false;
             currentSnapArea = null;
-            
-            // 计算拖拽元素的中心点
+
+            // Calculate draggable element's center point
             const elementCenterX = newLeft + elementWidth / 2;
             const elementCenterY = newTop + elementHeight / 2;
-            
-            // 检查每个吸附区域
+
+            // Check each snap area
             snapAreas.forEach(area => {
                 const areaRect = area.getBoundingClientRect();
                 const containerRect = dragContainer.getBoundingClientRect();
-                
-                // 计算吸附区域相对于容器的位置
+
+                // Calculate snap area position relative to container
                 const areaLeft = areaRect.left - containerRect.left;
                 const areaTop = areaRect.top - containerRect.top;
                 const areaCenterX = areaLeft + areaRect.width / 2;
                 const areaCenterY = areaTop + areaRect.height / 2;
-                
-                // 计算拖拽元素中心与吸附区域中心的距离
+
+                // Calculate distance between element center and snap area center
                 const distanceX = Math.abs(elementCenterX - areaCenterX);
                 const distanceY = Math.abs(elementCenterY - areaCenterY);
-                
-                // 如果距离小于阈值，则吸附
+
+                // Snap if distance is less than threshold
                 if (distanceX < snapThreshold && distanceY < snapThreshold) {
-                    // 计算吸附后的位置（使元素中心与吸附区域中心对齐）
+                    // Calculate snapped position (align element center with snap area center)
                     newLeft = areaCenterX - elementWidth / 2;
                     newTop = areaCenterY - elementHeight / 2;
                     isSnapped = true;
                     currentSnapArea = area.id;
                 }
             });
-            
-            // 设置新位置
+
+            // Set new position
             draggableElement.style.left = newLeft + 'px';
             draggableElement.style.top = newTop + 'px';
-            draggableElement.style.transform = 'none'; // 移除初始的居中transform
-            
-            // 更新结果显示
+            draggableElement.style.transform = 'none'; // Remove initial centering transform
+
+            // Update result display
             if (isSnapped) {
-                dragResult.textContent = `已吸附到 ${currentSnapArea}，位置: X=${Math.round(newLeft)}px, Y=${Math.round(newTop)}px`;
-                draggableElement.style.boxShadow = '0 0 10px 5px rgba(52, 152, 219, 0.5)'; // 吸附时的特殊效果
+                dragResult.textContent = `Snapped to ${currentSnapArea}, Position: X=${Math.round(newLeft)}px, Y=${Math.round(newTop)}px`;
+                draggableElement.style.boxShadow = '0 0 10px 5px rgba(52, 152, 219, 0.5)'; // Special effect when snapped
             } else {
-                dragResult.textContent = `当前位置: X=${Math.round(newLeft)}px, Y=${Math.round(newTop)}px`;
+                dragResult.textContent = `Current position: X=${Math.round(newLeft)}px, Y=${Math.round(newTop)}px`;
                 draggableElement.style.boxShadow = '0 8px 16px rgba(0,0,0,0.3)';
             }
         });
-        
+
         document.addEventListener('mouseup', () => {
             if (isDragging) {
                 isDragging = false;
-                
-                // 恢复正常样式，但保留吸附效果
+
+                // Restore normal style, but keep snap effect
                 draggableElement.style.opacity = '1';
                 if (!isSnapped) {
                     draggableElement.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
                 }
-                
+
                 if (isSnapped) {
-                    dragResult.textContent = `拖拽结束，已吸附到 ${currentSnapArea}`;
+                    dragResult.textContent = `Drag ended, snapped to ${currentSnapArea}`;
                 } else {
-                    dragResult.textContent += ' (拖拽结束)';
+                    dragResult.textContent += ' (Drag ended)';
                 }
             }
         });
-        
-        // 悬停测试功能
+
+        // Hover test functionality
         const deleteButton = document.getElementById('deleteButton');
         const hoverResult = document.getElementById('hoverResult');
-        
+
         deleteButton.addEventListener('mouseenter', () => {
-            hoverResult.textContent = '鼠标悬停在按钮上 - 按钮变为红色';
+            hoverResult.textContent = 'Mouse hovering over button - Button turns red';
         });
-        
+
         deleteButton.addEventListener('mouseleave', () => {
-            hoverResult.textContent = '鼠标离开按钮 - 按钮恢复原样';
+            hoverResult.textContent = 'Mouse left button - Button returns to normal';
         });
-        
-        // 文字选择测试功能
+
+        // Text selection test functionality
         const selectableText = document.getElementById('selectableText');
         const selectionResult = document.getElementById('selectionResult');
-        
+
         document.addEventListener('selectionchange', () => {
             const selection = window.getSelection();
             const selectedText = selection.toString();
-            
+
             if (selectedText && selectableText.contains(selection.anchorNode)) {
-                selectionResult.textContent = `选择的文本: "${selectedText}"`;
+                selectionResult.textContent = `Selected text: "${selectedText}"`;
             }
         });
-        
-        // 辅助函数：生成随机颜色
+
+        // Helper function: generate random color
         function getRandomColor() {
             const letters = '0123456789ABCDEF';
             let color = '#';
@@ -448,6 +469,8 @@
             }
             return color;
         }
+
     </script>
 </body>
+
 </html>

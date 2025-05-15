@@ -1,9 +1,9 @@
 // Get and display device information
 function updateDeviceList() {
-  chrome.storage.local.get(['connectedHIDDevices'], function(result) {
+  chrome.storage.local.get(['connectedHIDDevices'], function (result) {
     const deviceList = document.getElementById('deviceList');
     const devices = result.connectedHIDDevices;
-    
+
     if (devices && devices.length > 0) {
       deviceList.innerHTML = devices.map(device => `
         <div class="device-item">

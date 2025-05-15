@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "HTML Content Inserter",
+  "name": "Haptic Mouse",
   "version": "1.0",
-  "description": "A Chrome extension for inserting HTML content into web pages",
+  "description": "A Chrome extension that provides haptic feedback for web page interactions like button clicks, scrolling, and dragging",
   "permissions": [
     "activeTab",
     "scripting",
