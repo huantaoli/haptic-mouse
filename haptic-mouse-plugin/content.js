@@ -111,16 +111,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 function initHMMonitor() {
   // Haptic feedback intensity constants
   const HAPTIC_FEEDBACK = {
-    SCROLL_CONTINUOUS: 20,    // 持续滚动时的轻微反馈
-    DRAG_START_END: 30,      // 开始/结束拖拽时的反馈
-    DRAG_CONTINUOUS: 30,     // 拖拽过程中的反馈
-    SNAP_DETACH: 40,         // 从吸附区域脱离时的反馈
-    BUTTON_CLICKED: 50,      // 普通按钮点击的反馈
-    HOVER_WARNING: 60,       // 警告按钮悬停的反馈
-    SCROLL_BOUNDARY: 80,     // 滚动到顶部/底部的强反馈
-    SNAP_ATTACHED: 100,      // 元素吸附到目标区域的反馈
-    WARNING_CLICKED: 120,    // 警告按钮点击的强反馈
-    TEXT_SELECTED: 25        // 文本选择的轻微反馈
+    BUTTON_CLICKED: 1,      // 普通按钮点击的反馈
+
+    SCROLL_CONTINUOUS: 123,    // 持续滚动时的轻微反馈
+    SCROLL_BOUNDARY: 81,     // 滚动到顶部/底部的强反馈
+
+    DRAG_START_END: 24,      // 开始/结束拖拽时的反馈
+    DRAG_CONTINUOUS: 57,     // 拖拽过程中的反馈
+    SNAP_DETACH: 34,         // 从吸附区域脱离时的反馈
+    SNAP_ATTACHED: 77,      // 元素吸附到目标区域的反馈
+
+    HOVER_WARNING: 16,       // 警告按钮悬停的反馈
+    WARNING_CLICKED: 14,    // 警告按钮点击的强反馈
+
+    TEXT_SELECTED: 26        // 文本选择的轻微反馈
   };
 
   const monitoredElements = document.querySelectorAll("[data-hm-type]");
